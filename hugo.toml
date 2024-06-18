@@ -1,4 +1,4 @@
 baseURL = 'https://blog.loganthompson.de/'
 languageCode = 'en-us'
 title = 'Logan Thompson'
-theme = 'papermod'
+theme = 'github.com/adityatelange/hugo-PaperMod'
