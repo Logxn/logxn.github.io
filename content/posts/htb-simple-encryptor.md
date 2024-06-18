@@ -236,4 +236,4 @@ print(f'Decrypted flag: {decrypted.decode("utf-8")}')
 
 All in all I would rate this challenge with **Easy** instead of **Very Easy** since it requires some prior knowledge to bitwise operators.
 
-That's all for now, hopefully you'll joing me for the next challenge soon! :)
+That's all for now, hopefully you'll join me for the next challenge soon! :)
