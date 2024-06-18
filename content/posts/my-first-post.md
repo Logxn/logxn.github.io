@@ -1,5 +1,7 @@
 +++
-title = 'My First Post'
+title = ''
 date = 2024-06-18T10:30:31+02:00
-draft = true
+draft = false
 +++
+
+# Test
