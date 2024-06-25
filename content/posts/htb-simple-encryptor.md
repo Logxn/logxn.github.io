@@ -36,7 +36,7 @@ This is all the recon I will do for now, time to load the file with Ghidra!
 
 ## 0x2 REVERSE
 ![Decompilation with Ghidra](decompilation.png)
-This is what we are greeted with when loading `encrypt` with Ghidra and decompiling the `main` function.
+This is what we are greeted with when loading `encrypt` into Ghidra and decompiling the `main` function.
 As you can see some of the variables have already been renamed and comments were added by me.
 
 Dont worry if you can't make anything of it. Lets break it down.
@@ -58,7 +58,7 @@ In short this function sets the position indicator of a file stream. Imagine if 
 ```c
 flag_size = ftell(flag_pointer);
 ```
-Next the encryptor calls the function [ftell](https://cplusplus.com/reference/cstdio/ftell/) which takes only one argument `stream` (in our case: `file_pointer`). When the stream is a binary stream (which it is, since the encryptor opened it with the flags ***rb***) the function returns the numbers of bytes the position indicator has moved from the beginning of the file. This is the method how the encryptor reads how big the file is, thats why I named the return value `flag_size`.
+Next the encryptor calls the function [ftell](https://cplusplus.com/reference/cstdio/ftell/) which takes only one argument `stream` (in our case: `file_pointer`). When the stream is a binary stream (which it is, since the encryptor opened it with the flags ***rb***) the function returns the numbers of bytes the position indicator has moved from the beginning of the file. This is the method how the encryptor reads how big the file is, thats why I named the variable of the return value `flag_size`.
 
 ```c
 fseek(flag_pointer,0,0);
@@ -72,7 +72,7 @@ Afterwards the encryptor allocates space in memory using `malloc`. The size it a
 fread(mem_ptr,flag_size,1,flag_pointer);
 fclose(flag_pointer);
 ```
-To finish reading the flag the encryptor utilizes [fread](https://cplusplus.com/reference/cstdio/fread/) which takes four arguments `ptr`, `size`, `count` and `stream`. The first argument `ptr` tells the function where the read content should be saved. In our case thats the memory the encryptor has just allocated for us. Next `size` tells the function how many bytes should be read. The third parameter `count` tells the function how many elements we are dealing with. Each element has a size of the previous argument `size`. In our case we are dealing with `flag_size * 1` bytes that should be read -- in simple terms: read the flag exactly once. The last argument `stream` tells the function where we want to read from.
+To finish reading the flag the encryptor utilizes [fread](https://cplusplus.com/reference/cstdio/fread/) which takes four arguments `ptr`, `size`, `count` and `stream`. The first argument `ptr` tells the function where the read content should be saved. In our case that's the memory the encryptor has just allocated for us. Next `size` tells the function how many bytes should be read. The third parameter `count` tells the function how many elements we are dealing with. Each element has a size of the previous argument `size`. In our case we are dealing with `flag_size * 1` bytes that should be read -- in simple terms: read the flag exactly once. The last argument `stream` tells the function where we want to read from.
 
 Finally the stream to the flag file is closed via [fclose](https://cplusplus.com/reference/cstdio/fclose).
 
@@ -87,7 +87,7 @@ srand(timestamp_seed);
 ```
 It is now time to look at how the encryption actually works, so we can make a plan on how to decrypt the encrypted flag within the challenge files. Firstly the encryptor calls [time](https://cplusplus.com/reference/ctime/time/) which takes exactly one argument `time` (which is a pointer to [time_t](https://cplusplus.com/reference/ctime/time_t/)). Normaly the function would take a specific time and date, but in our case the decompiler shows ***0x0*** which essentially is a NULL-Pointer. This means that the argument is not used. Because of this the function will return the seconds passed since ***00:00, Jan 1 1970 UTC***. The returned seconds are then saved in a variable I called `timestamp_seed`.
 
-Next the function calls [srand](https://cplusplus.com/reference/cstdlib/srand/) which takes exactly one argument `seed`. As we can see in Ghidra's decompiler, the encryptor passes the received timestamp as seed. It is important to know, that `srand` initializes a **pseudo**-number-generator. After that we could call `rand()` a number of times to receive different random numbers.If we know the value of the seed we can **always** generate the same numbers on almost any machine, in the same order.
+Next the function calls [srand](https://cplusplus.com/reference/cstdlib/srand/) which takes exactly one argument `seed`. As we can see in Ghidra's decompiler, the encryptor passes the received timestamp as seed. It is important to know, that `srand` initializes a **pseudo**-number-generator. After that we could call `rand()` a number of times to receive different random numbers. If we know the value of the seed we can **always** generate the same numbers on almost any machine, in the same order.
 
 This will be the part we will try to exploit in the future! 😈
 
