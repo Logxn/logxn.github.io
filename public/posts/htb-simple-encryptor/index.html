@@ -1,136 +1,707 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>HackTheBox - Simple Encryptor &middot; Logan Thompson&#39;s Blog</title>
+  <meta name="title" content="HackTheBox - Simple Encryptor &middot; Logan Thompson&#39;s Blog" />
+  
+  
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/htb-simple-encryptor/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.033c29e8e83f80ecf82e52f5fe422a9a28965c2fe5de01df66bb0a0fb6244fc593569fc4f2258c84b68b10e0cf7a01bfeb7faa69b2d0f13e05e3f91c78c0d591.css"
+    integrity="sha512-Azwp6Og/gOz4LlL1/kIqmiiWXC/l3gHfZrsKD7YkT8WTVp/E8iWMhLaLEODPegG/63&#43;qabLQ8T4F4/kceMDVkQ==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b89ac69ff9802fd5418564a45dada46f018c4ac81ae1bf932b5b6592063cf05a524e658c0ed84f3b96023c793cc651ac796e79381a45512a08354ba66739c767.js"
+    integrity="sha512-uJrGn/mAL9VBhWSkXa2kbwGMSsga4b&#43;TK1tlkgY88FpSTmWMDthPO5YCPHk8xlGseW55OBpFUSoINUumZznHZw==" data-copy="" data-copied=""></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.fcbc7f7b3dcea96e3b5570cd322c5d7a12d5351c87f9889b1c31745a2cc711df58f6b70795a86d50e63813b236ade916668332c10a70a4ce26f7c0878f525fce.js" integrity="sha512-/Lx/ez3OqW47VXDNMixdehLVNRyH&#43;YibHDF0WizHEd9Y9rcHlahtUOY4E7I2rekWZoMywQpwpM4m98CHj1Jfzg=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="http://localhost:1313/posts/htb-simple-encryptor/">
+  <meta property="og:site_name" content="Logan Thompson&#39;s Blog">
+  <meta property="og:title" content="HackTheBox - Simple Encryptor">
+  <meta property="og:description" content="Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-06-18T10:30:31+02:00">
+    <meta property="article:modified_time" content="2024-06-18T10:30:31+02:00">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
-<title>HackTheBox - Simple Encryptor | Logan Thompson</title>
-<meta name="keywords" content="">
-<meta name="description" content="Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!
-0x1 - RECON Before we begin reversing the encryptor we have to see what we are dealing with.
-Identifying the file type A quick call to file reveals that the encrypt file is a 64Bit Linux executable. Now unfortunately that won&rsquo;t run natively on my M3 MacBook Pro.">
-<meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/htb-simple-encryptor/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/htb-simple-encryptor/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HackTheBox - Simple Encryptor">
+  <meta name="twitter:description" content="Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!">
 
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "HackTheBox - Simple Encryptor",
+    "headline": "HackTheBox - Simple Encryptor",
+    
+    "abstract": "Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!",
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/htb-simple-encryptor\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Logan Thompson"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-06-18T10:30:31\u002b02:00",
+    "datePublished": "2024-06-18T10:30:31\u002b02:00",
+    
+    "dateModified": "2024-06-18T10:30:31\u002b02:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "1896"
+  }]
+  </script>
 
-            .list {
-                background: var(--theme);
-            }
 
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
+  
+  
+  <meta name="author" content="Logan Thompson" />
+  
+  
+  
+  <link href="https://github.com/Logxn" rel="me" />
+  
+  
+  <link href="https://www.linkedin.com/in/logan-thompson-387527261/" rel="me" />
+  
+  
+  <link href="https://twitter.com/loganpunkt" rel="me" />
+  
+  
+  
+  
 
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
+<script src="/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js" integrity="sha512-A8sWDjz9smZ6LiyA0oO&#43;vPY/&#43;LvEtinJqyur9vrh0MB61HDtrng&#43;&#43;k&#43;r2irAHFjWDmO5izwza&#43;gghGDwj0NU9Q=="></script>
 
-    </style>
-</noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
 </head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
 
-<body class="" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">Logan Thompson&rsquo;s Blog</a>
+            
 
-</script>
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
 
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Logan Thompson (Alt + H)">Logan Thompson</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
+            
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Blog
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
                 </button>
             </div>
-        </div>
-        <ul id="menu">
-        </ul>
-    </nav>
-</header>
-<main class="main">
+            
 
-<article class="post-single">
-  <header class="post-header">
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Blog
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
     
-    <h1 class="post-title entry-hint-parent">
+    <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/"
+      >Logan Thompson&#39;s Blog</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline ">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/posts/"
+      >Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/posts/htb-simple-encryptor/"
+      >HackTheBox - Simple Encryptor</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
       HackTheBox - Simple Encryptor
     </h1>
-    <div class="post-meta"><span title='2024-06-18 10:30:31 +0200 CEST'>June 18, 2024</span>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-06-18 10:30:31 &#43;0200 CEST">18 June 2024</time><span class="px-2 text-primary-500">&middot;</span><span>1896 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">9 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      Author
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      Logan Thompson
+    </div>
+    
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/Logxn"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://www.linkedin.com/in/logan-thompson-387527261/"
+          target="_blank"
+          aria-label="Linkedin"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://twitter.com/loganpunkt"
+          target="_blank"
+          aria-label="X-Twitter"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
 
 </div>
-  </header> 
-  <div class="post-content"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">Type</span>: <span style="color:#ae81ff">Challenge</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">Category</span>: <span style="color:#ae81ff">Reversing</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">Difficulty</span>: <span style="color:#ae81ff">Very Easy</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">Solves</span>: <span style="color:#ae81ff">3655</span>
-</span></span></code></pre></div><p>In this post we will be looking at a very simple encryptor and how to break it!</p>
-<h2 id="0x1---recon">0x1 - RECON<a hidden class="anchor" aria-hidden="true" href="#0x1---recon">#</a></h2>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0x1---recon">0x1 - RECON</a>
+      <ul>
+        <li><a href="#identifying-the-file-type">Identifying the file type</a></li>
+        <li><a href="#strings">Strings</a></li>
+      </ul>
+    </li>
+    <li><a href="#0x2-reverse">0x2 REVERSE</a>
+      <ul>
+        <li><a href="#reading-the-flag">Reading the flag</a></li>
+        <li><a href="#encryption-time">Encryption time!</a></li>
+      </ul>
+    </li>
+    <li><a href="#0x3-decrypt">0x3 DECRYPT</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0x1---recon">0x1 - RECON</a>
+      <ul>
+        <li><a href="#identifying-the-file-type">Identifying the file type</a></li>
+        <li><a href="#strings">Strings</a></li>
+      </ul>
+    </li>
+    <li><a href="#0x2-reverse">0x2 REVERSE</a>
+      <ul>
+        <li><a href="#reading-the-flag">Reading the flag</a></li>
+        <li><a href="#encryption-time">Encryption time!</a></li>
+      </ul>
+    </li>
+    <li><a href="#0x3-decrypt">0x3 DECRYPT</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l">Challenge</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Category</span><span class="p">:</span><span class="w"> </span><span class="l">Reversing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Difficulty</span><span class="p">:</span><span class="w"> </span><span class="l">Very Easy</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Solves</span><span class="p">:</span><span class="w"> </span><span class="m">3655</span><span class="w">
+</span></span></span></code></pre></div><p>In this post we will be looking at a very simple encryptor and how to break it!</p>
+
+
+<h2 class="relative group">0x1 - RECON 
+    <div id="0x1---recon" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0x1---recon" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
 <p>Before we begin reversing the encryptor we have to see what we are dealing with.</p>
-<h3 id="identifying-the-file-type">Identifying the file type<a hidden class="anchor" aria-hidden="true" href="#identifying-the-file-type">#</a></h3>
-<p><img loading="lazy" src="file_type.png" alt="File Output"  />
+
+
+<h3 class="relative group">Identifying the file type 
+    <div id="identifying-the-file-type" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#identifying-the-file-type" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/file_type.png"
+        alt="File Output"
+      />
+      
+    </figure>
 
 A quick call to <code>file</code> reveals that the <code>encrypt</code> file is a 64Bit Linux executable.
 Now unfortunately that won&rsquo;t run natively on my M3 MacBook Pro.
 But for now we don&rsquo;t yet know if we have to run this file - chances are we can simply reverse engineer the file and build a decryptor without ever running it.</p>
-<h3 id="strings">Strings<a hidden class="anchor" aria-hidden="true" href="#strings">#</a></h3>
-<p><img loading="lazy" src="strings.png" alt="Strings Output"  />
+
+
+<h3 class="relative group">Strings 
+    <div id="strings" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#strings" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/strings.png"
+        alt="Strings Output"
+      />
+      
+    </figure>
 
 Calling <code>strings</code> reveals some interesting references:</p>
 <pre tabindex="0"><code>srand
@@ -138,241 +709,371 @@ fopen
 ftell
 time
 </code></pre><p>This is all the recon I will do for now, time to load the file with Ghidra!</p>
-<h2 id="0x2-reverse">0x2 REVERSE<a hidden class="anchor" aria-hidden="true" href="#0x2-reverse">#</a></h2>
-<p><img loading="lazy" src="decompilation.png" alt="Decompilation with Ghidra"  />
+
+
+<h2 class="relative group">0x2 REVERSE 
+    <div id="0x2-reverse" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0x2-reverse" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/decompilation.png"
+        alt="Decompilation with Ghidra"
+      />
+      
+    </figure>
 
 This is what we are greeted with when loading <code>encrypt</code> into Ghidra and decompiling the <code>main</code> function.
 As you can see some of the variables have already been renamed and comments were added by me.</p>
 <p>Dont worry if you can&rsquo;t make anything of it. Lets break it down.</p>
-<h3 id="reading-the-flag">Reading the flag<a hidden class="anchor" aria-hidden="true" href="#reading-the-flag">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>flag_pointer <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;flag&#34;</span>,<span style="color:#e6db74">&#34;rb&#34;</span>);
-</span></span></code></pre></div><p>The encryptor first calls the function <a href="https://cplusplus.com/reference/cstdio/fopen/">fopen</a> which takes two arguments <code>filename</code> and <code>mode</code>. Looking at the function call the first argument is obvious, the file that the encryptor reads is called <em><strong>flag</strong></em> but the second argument might not be so obvious at first. The file <em><strong>flag</strong></em> is opened with the mode <em><strong>rb</strong></em> where <em><strong>r</strong></em> stands for <em>read</em> and <em><strong>b</strong></em> for <em>binary</em> &ndash; in simple terms: &ldquo;read the file as binary&rdquo;. This function will return a pointer in memory where the file is stored and stores it in a variable, which I called <code>file_pointer</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">fseek</span>(flag_pointer,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>);
-</span></span></code></pre></div><p>Next the encryptor calls the function <a href="https://cplusplus.com/reference/cstdio/fseek/">fseek</a> which takes three arguments <code>stream</code>(which is a pointer to a file) <code>offset</code> and <code>origin</code>.
+
+
+<h3 class="relative group">Reading the flag 
+    <div id="reading-the-flag" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#reading-the-flag" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">flag_pointer</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="s">&#34;flag&#34;</span><span class="p">,</span><span class="s">&#34;rb&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><p>The encryptor first calls the function <a href="https://cplusplus.com/reference/cstdio/fopen/" target="_blank">fopen</a> which takes two arguments <code>filename</code> and <code>mode</code>. Looking at the function call the first argument is obvious, the file that the encryptor reads is called <em><strong>flag</strong></em> but the second argument might not be so obvious at first. The file <em><strong>flag</strong></em> is opened with the mode <em><strong>rb</strong></em> where <em><strong>r</strong></em> stands for <em>read</em> and <em><strong>b</strong></em> for <em>binary</em> &ndash; in simple terms: &ldquo;read the file as binary&rdquo;. This function will return a pointer in memory where the file is stored and stores it in a variable, which I called <code>file_pointer</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">fseek</span><span class="p">(</span><span class="n">flag_pointer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</span></span></code></pre></div><p>Next the encryptor calls the function <a href="https://cplusplus.com/reference/cstdio/fseek/" target="_blank">fseek</a> which takes three arguments <code>stream</code>(which is a pointer to a file) <code>offset</code> and <code>origin</code>.
 In short this function sets the position indicator of a file stream. Imagine if you have opened a textfile with your favorite editor. The curser position in your editor is the same as the position indicator of a file stream. The third argument of fseek is <code>origin</code> and defines where the cursor should be set. In this case the number <em><strong>2</strong></em> is the integer representation of the C++ constant <code>SEEK_END</code>, which means that the cursor is placed at the end of the file. The second argument <code>offset</code> tells the function how many bytes the cursor should move from <code>origin</code>. So since <code>origin</code> is the end of the file and <code>offset</code> is <em><strong>0</strong></em> the cursor is supposed to remain at the end of the file.</p>
 <p><strong>TL;DR:</strong> The cursor in our file stream <code>file_pointer</code> is now at the end of the file.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>flag_size <span style="color:#f92672">=</span> <span style="color:#a6e22e">ftell</span>(flag_pointer);
-</span></span></code></pre></div><p>Next the encryptor calls the function <a href="https://cplusplus.com/reference/cstdio/ftell/">ftell</a> which takes only one argument <code>stream</code> (in our case: <code>file_pointer</code>). When the stream is a binary stream (which it is, since the encryptor opened it with the flags <em><strong>rb</strong></em>) the function returns the numbers of bytes the position indicator has moved from the beginning of the file. This is the method how the encryptor reads how big the file is, thats why I named the variable of the return value <code>flag_size</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">fseek</span>(flag_pointer,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>);
-</span></span><span style="display:flex;"><span>mem_ptr <span style="color:#f92672">=</span> <span style="color:#a6e22e">malloc</span>(flag_size);
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">flag_size</span> <span class="o">=</span> <span class="nf">ftell</span><span class="p">(</span><span class="n">flag_pointer</span><span class="p">);</span>
+</span></span></code></pre></div><p>Next the encryptor calls the function <a href="https://cplusplus.com/reference/cstdio/ftell/" target="_blank">ftell</a> which takes only one argument <code>stream</code> (in our case: <code>file_pointer</code>). When the stream is a binary stream (which it is, since the encryptor opened it with the flags <em><strong>rb</strong></em>) the function returns the numbers of bytes the position indicator has moved from the beginning of the file. This is the method how the encryptor reads how big the file is, thats why I named the variable of the return value <code>flag_size</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">fseek</span><span class="p">(</span><span class="n">flag_pointer</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">mem_ptr</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="n">flag_size</span><span class="p">);</span>
 </span></span></code></pre></div><p>Now the encryptor moves the position indicator back to the beginning of the file (Note: This is because <code>origin</code> is now <em><strong>0</strong></em> too which translates to <code>SEEK_SET</code>).</p>
 <p>Afterwards the encryptor allocates space in memory using <code>malloc</code>. The size it allocates is the same size as the flag. The return value will be a pointer to the allocated space in memory.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">fread</span>(mem_ptr,flag_size,<span style="color:#ae81ff">1</span>,flag_pointer);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fclose</span>(flag_pointer);
-</span></span></code></pre></div><p>To finish reading the flag the encryptor utilizes <a href="https://cplusplus.com/reference/cstdio/fread/">fread</a> which takes four arguments <code>ptr</code>, <code>size</code>, <code>count</code> and <code>stream</code>. The first argument <code>ptr</code> tells the function where the read content should be saved. In our case that&rsquo;s the memory the encryptor has just allocated for us. Next <code>size</code> tells the function how many bytes should be read. The third parameter <code>count</code> tells the function how many elements we are dealing with. Each element has a size of the previous argument <code>size</code>. In our case we are dealing with <code>flag_size * 1</code> bytes that should be read &ndash; in simple terms: read the flag exactly once. The last argument <code>stream</code> tells the function where we want to read from.</p>
-<p>Finally the stream to the flag file is closed via <a href="https://cplusplus.com/reference/cstdio/fclose">fclose</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">fread</span><span class="p">(</span><span class="n">mem_ptr</span><span class="p">,</span><span class="n">flag_size</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">flag_pointer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fclose</span><span class="p">(</span><span class="n">flag_pointer</span><span class="p">);</span>
+</span></span></code></pre></div><p>To finish reading the flag the encryptor utilizes <a href="https://cplusplus.com/reference/cstdio/fread/" target="_blank">fread</a> which takes four arguments <code>ptr</code>, <code>size</code>, <code>count</code> and <code>stream</code>. The first argument <code>ptr</code> tells the function where the read content should be saved. In our case that&rsquo;s the memory the encryptor has just allocated for us. Next <code>size</code> tells the function how many bytes should be read. The third parameter <code>count</code> tells the function how many elements we are dealing with. Each element has a size of the previous argument <code>size</code>. In our case we are dealing with <code>flag_size * 1</code> bytes that should be read &ndash; in simple terms: read the flag exactly once. The last argument <code>stream</code> tells the function where we want to read from.</p>
+<p>Finally the stream to the flag file is closed via <a href="https://cplusplus.com/reference/cstdio/fclose" target="_blank">fclose</a>.</p>
 <p><strong>TL;DR:</strong> Read the flag and save it in memory.</p>
-<h3 id="encryption-time">Encryption time!<a hidden class="anchor" aria-hidden="true" href="#encryption-time">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>tVar1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span>((<span style="color:#66d9ef">time_t</span> <span style="color:#f92672">*</span>)<span style="color:#ae81ff">0x0</span>);
-</span></span><span style="display:flex;"><span>timestamp_seed <span style="color:#f92672">=</span> (uint)tVar1;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">srand</span>(timestamp_seed);
-</span></span></code></pre></div><p>It is now time to look at how the encryption actually works, so we can make a plan on how to decrypt the encrypted flag within the challenge files. Firstly the encryptor calls <a href="https://cplusplus.com/reference/ctime/time/">time</a> which takes exactly one argument <code>time</code> (which is a pointer to <a href="https://cplusplus.com/reference/ctime/time_t/">time_t</a>). Normaly the function would take a specific time and date, but in our case the decompiler shows <em><strong>0x0</strong></em> which essentially is a NULL-Pointer. This means that the argument is not used. Because of this the function will return the seconds passed since <em><strong>00:00, Jan 1 1970 UTC</strong></em>. The returned seconds are then saved in a variable I called <code>timestamp_seed</code>.</p>
-<p>Next the function calls <a href="https://cplusplus.com/reference/cstdlib/srand/">srand</a> which takes exactly one argument <code>seed</code>. As we can see in Ghidra&rsquo;s decompiler, the encryptor passes the received timestamp as seed. It is important to know, that <code>srand</code> initializes a <strong>pseudo</strong>-number-generator. After that we could call <code>rand()</code> a number of times to receive different random numbers. If we know the value of the seed we can <strong>always</strong> generate the same numbers on almost any machine, in the same order.</p>
+
+
+<h3 class="relative group">Encryption time! 
+    <div id="encryption-time" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encryption-time" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">tVar1</span> <span class="o">=</span> <span class="nf">time</span><span class="p">((</span><span class="kt">time_t</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">timestamp_seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">tVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">srand</span><span class="p">(</span><span class="n">timestamp_seed</span><span class="p">);</span>
+</span></span></code></pre></div><p>It is now time to look at how the encryption actually works, so we can make a plan on how to decrypt the encrypted flag within the challenge files. Firstly the encryptor calls <a href="https://cplusplus.com/reference/ctime/time/" target="_blank">time</a> which takes exactly one argument <code>time</code> (which is a pointer to <a href="https://cplusplus.com/reference/ctime/time_t/" target="_blank">time_t</a>). Normaly the function would take a specific time and date, but in our case the decompiler shows <em><strong>0x0</strong></em> which essentially is a NULL-Pointer. This means that the argument is not used. Because of this the function will return the seconds passed since <em><strong>00:00, Jan 1 1970 UTC</strong></em>. The returned seconds are then saved in a variable I called <code>timestamp_seed</code>.</p>
+<p>Next the function calls <a href="https://cplusplus.com/reference/cstdlib/srand/" target="_blank">srand</a> which takes exactly one argument <code>seed</code>. As we can see in Ghidra&rsquo;s decompiler, the encryptor passes the received timestamp as seed. It is important to know, that <code>srand</code> initializes a <strong>pseudo</strong>-number-generator. After that we could call <code>rand()</code> a number of times to receive different random numbers. If we know the value of the seed we can <strong>always</strong> generate the same numbers on almost any machine, in the same order.</p>
 <p>This will be the part we will try to exploit in the future! 😈</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> (<span style="color:#66d9ef">long</span>)flag_size; i <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
-</span></span><span style="display:flex;"><span>    pseudo_random <span style="color:#f92672">=</span> <span style="color:#a6e22e">rand</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>(byte <span style="color:#f92672">*</span>)((<span style="color:#66d9ef">long</span>)mem_ptr <span style="color:#f92672">+</span> i) <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(byte <span style="color:#f92672">*</span>)((<span style="color:#66d9ef">long</span>)mem_ptr <span style="color:#f92672">+</span> i) <span style="color:#f92672">^</span> (byte)pseudo_random;
-</span></span><span style="display:flex;"><span>    pseudo_random2 <span style="color:#f92672">=</span> <span style="color:#a6e22e">rand</span>();
-</span></span><span style="display:flex;"><span>    pseudo_random2 <span style="color:#f92672">=</span> pseudo_random2 <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">7</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>(byte <span style="color:#f92672">*</span>)((<span style="color:#66d9ef">long</span>)mem_ptr <span style="color:#f92672">+</span> i) <span style="color:#f92672">=</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>(byte <span style="color:#f92672">*</span>)((<span style="color:#66d9ef">long</span>)mem_ptr <span style="color:#f92672">+</span> i) <span style="color:#f92672">&lt;&lt;</span> (sbyte)pseudo_random2 <span style="color:#f92672">|</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>(byte <span style="color:#f92672">*</span>)((<span style="color:#66d9ef">long</span>)mem_ptr <span style="color:#f92672">+</span> i) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> (sbyte)pseudo_random2;
-</span></span><span style="display:flex;"><span>}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">flag_size</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">mem_ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">mem_ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="n">pseudo_random</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random2</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random2</span> <span class="o">=</span> <span class="n">pseudo_random2</span> <span class="o">&amp;</span> <span class="mi">7</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">mem_ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">mem_ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">sbyte</span><span class="p">)</span><span class="n">pseudo_random2</span> <span class="o">|</span>
+</span></span><span class="line"><span class="cl">        <span class="o">*</span><span class="p">(</span><span class="n">byte</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">mem_ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span> <span class="o">-</span> <span class="p">(</span><span class="n">sbyte</span><span class="p">)</span><span class="n">pseudo_random2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>This is where the fun stuff is happening, so let&rsquo;s look closely what happens.</p>
 <ol>
 <li>The encryptor runs a loop starting at 0 and counts up until it reaches the size of the original flag. The current count is stored in <code>i</code>.</li>
-<li>A <strong>supposedly</strong> random number is generated via <a href="https://cplusplus.com/reference/cstdlib/rand/">rand</a> and stored in what I called <code>pseudo_random</code></li>
-<li>It reads the n-th byte of the flag it copied into memory (it does this by doing <code>mem_ptr + i</code>. So if <code>i = 0</code> it reads the first byte, <code>i = 1</code> the second and so on). The read byte is then <a href="https://www.loginradius.com/blog/engineering/how-does-bitwise-xor-work/">XORed</a> with the first random number generated.</li>
+<li>A <strong>supposedly</strong> random number is generated via <a href="https://cplusplus.com/reference/cstdlib/rand/" target="_blank">rand</a> and stored in what I called <code>pseudo_random</code></li>
+<li>It reads the n-th byte of the flag it copied into memory (it does this by doing <code>mem_ptr + i</code>. So if <code>i = 0</code> it reads the first byte, <code>i = 1</code> the second and so on). The read byte is then <a href="https://www.loginradius.com/blog/engineering/how-does-bitwise-xor-work/" target="_blank">XORed</a> with the first random number generated.</li>
 <li>A second <strong>supposedly</strong> random number is generated via rand.</li>
-<li>The second generated number is compared with the number 7 using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_AND">Bitwise AND</a> the result will be saved in <code>pseudo_random2</code> again.</li>
+<li>The second generated number is compared with the number 7 using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_AND" target="_blank">Bitwise AND</a> the result will be saved in <code>pseudo_random2</code> again.</li>
 <li>The encrypted bytes get saved in a three step process
 <ol>
-<li>The previously with XOR encrypted bytes are <a href="https://www.interviewcake.com/concept/java/bit-shift">bitshifted</a> left by the number stored in <code>pseudo_random2</code></li>
-<li>The result of the bitshift is then being compared trough <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_OR">Bitwise OR</a> with yet another bitshift calculation. This time the bits are shifted to the right by <code>8 - pseudo_random2</code> positions.</li>
+<li>The previously with XOR encrypted bytes are <a href="https://www.interviewcake.com/concept/java/bit-shift" target="_blank">bitshifted</a> left by the number stored in <code>pseudo_random2</code></li>
+<li>The result of the bitshift is then being compared trough <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_OR" target="_blank">Bitwise OR</a> with yet another bitshift calculation. This time the bits are shifted to the right by <code>8 - pseudo_random2</code> positions.</li>
 </ol>
 </li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>enc_pointer <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;flag.enc&#34;</span>,<span style="color:#e6db74">&#34;wb&#34;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fwrite</span>(<span style="color:#f92672">&amp;</span>timestamp_seed,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">4</span>,enc_pointer);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fwrite</span>(mem_ptr,<span style="color:#ae81ff">1</span>,flag_size,enc_pointer);
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fclose</span>(enc_pointer)
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">enc_pointer</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="s">&#34;flag.enc&#34;</span><span class="p">,</span><span class="s">&#34;wb&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fwrite</span><span class="p">(</span><span class="o">&amp;</span><span class="n">timestamp_seed</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">enc_pointer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fwrite</span><span class="p">(</span><span class="n">mem_ptr</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">flag_size</span><span class="p">,</span><span class="n">enc_pointer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">fclose</span><span class="p">(</span><span class="n">enc_pointer</span><span class="p">)</span>
 </span></span></code></pre></div><p>Finally the encrypted bytes are saved to <code>flag.enc</code>.
 The encryptor utilizes fopen once again, this time using the <code>filename</code> <strong>flag.enc</strong> and the <code>mode</code> <strong>wb</strong> which unlike above stands for &ldquo;write bytes&rdquo;, receiving yet again a pointer to a file in memory (Note if the file doesn&rsquo;t exist, it will be created on disk).</p>
-<p>Next we see two calls to <a href="https://cplusplus.com/reference/cstdio/fwrite/?kw=fwrite">fwrite</a> which takes four arguments <code>ptr</code>, <code>size</code>, <code>count</code>, <code>stream</code> just like fread. The encryptor writes the <code>timestamp_seed</code> to the first four bytes (<code>size * count = 1 * 4</code>) of <code>flag.enc</code>. With the second call to fwrite the encryptor writes the encrypted bytes stored in <code>mem_ptr</code> to the encrypted file. Finally the handle to the encrypted flag file <code>flag.enc</code> is closed.</p>
+<p>Next we see two calls to <a href="https://cplusplus.com/reference/cstdio/fwrite/?kw=fwrite" target="_blank">fwrite</a> which takes four arguments <code>ptr</code>, <code>size</code>, <code>count</code>, <code>stream</code> just like fread. The encryptor writes the <code>timestamp_seed</code> to the first four bytes (<code>size * count = 1 * 4</code>) of <code>flag.enc</code>. With the second call to fwrite the encryptor writes the encrypted bytes stored in <code>mem_ptr</code> to the encrypted file. Finally the handle to the encrypted flag file <code>flag.enc</code> is closed.</p>
 <p>That&rsquo;s it. That&rsquo;s all that the decryptor does.</p>
-<h2 id="0x3-decrypt">0x3 DECRYPT<a hidden class="anchor" aria-hidden="true" href="#0x3-decrypt">#</a></h2>
+
+
+<h2 class="relative group">0x3 DECRYPT 
+    <div id="0x3-decrypt" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0x3-decrypt" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
 <p>If you understood every step and mathematical operation listed in <a href="#encryption-time">Encryption time!</a> you might have an idea on how we could be able to decrypt the file.</p>
 <p>Firstly we need to control the <code>timestamp_seed</code> and make sure it&rsquo;s the same as during the encryption, so we can generate the same &ldquo;random&rdquo; numbers. Luckily the timestamp was written to the first 4 bytes of the encrypted flag file <code>flag.enc</code> so let&rsquo;s extract it using python!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;flag.enc&#39;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f:
-</span></span><span style="display:flex;"><span>    timestamp <span style="color:#f92672">=</span> int<span style="color:#f92672">.</span>from_bytes(f<span style="color:#f92672">.</span>read(<span style="color:#ae81ff">4</span>), byteorder<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;little&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Timestamp used: </span><span style="color:#e6db74">{</span>timestamp<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>datetime<span style="color:#f92672">.</span>fromtimestamp(timestamp)<span style="color:#e6db74">}</span><span style="color:#e6db74">)&#39;</span>)
-</span></span></code></pre></div><p><img loading="lazy" src="timestamp.png" alt="Timestamp Reading"  />
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;flag.enc&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Timestamp used: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/timestamp.png"
+        alt="Timestamp Reading"
+      />
+      
+    </figure>
 </p>
 <p>As we can see, we have sucessfully read the timestamp that was saved in <code>flag.enc</code> and we now know that the flag was encrypted on <strong>05:04:58, June 1st, 2022</strong>.</p>
 <p>Next it&rsquo;s time to read the remaining data by moving the cursor of the file 4 bytes ahead since the first 4 bytes are occupied by the timestamp.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;flag.enc&#39;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f:
-</span></span><span style="display:flex;"><span>    timestamp <span style="color:#f92672">=</span> int<span style="color:#f92672">.</span>from_bytes(f<span style="color:#f92672">.</span>read(<span style="color:#ae81ff">4</span>), byteorder<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;little&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Move after timestamp</span>
-</span></span><span style="display:flex;"><span>    f<span style="color:#f92672">.</span>seek(<span style="color:#ae81ff">4</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    encrypted_flag <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Timestamp used: </span><span style="color:#e6db74">{</span>timestamp<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>datetime<span style="color:#f92672">.</span>fromtimestamp(timestamp)<span style="color:#e6db74">}</span><span style="color:#e6db74">)&#39;</span>)
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Encrypted flag (bytes): </span><span style="color:#e6db74">{</span>encrypted_flag<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
-</span></span></code></pre></div><p><img loading="lazy" src="encrypted_bytes.png" alt="Encrypted Bytes"  />
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;flag.enc&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Move after timestamp</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">encrypted_flag</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Timestamp used: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Encrypted flag (bytes): </span><span class="si">{</span><span class="n">encrypted_flag</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/encrypted_bytes.png"
+        alt="Encrypted Bytes"
+      />
+      
+    </figure>
 </p>
 <p>We have successfully read the encrypted bytes. But we don&rsquo;t know if we have read correctly, until we start the decryption process so let&rsquo;s go.</p>
 <p>If you have understood the mathematical operators the encryptor used from the previous chapter, you might know that all we have to do is repeat all steps but in reverse and inverted. So if bits were right shifted, we shift them left and vice versa. To revert the XOR operation we simply take the byte and XOR it with the same value again!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ctypes <span style="color:#f92672">import</span> CDLL, c_uint
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># We need this in order to use the srand library provided by the C-Language </span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># and not by python since they are different and wont result in the same values used by the encryptor.</span>
-</span></span><span style="display:flex;"><span>libc <span style="color:#f92672">=</span>  CDLL(<span style="color:#e6db74">&#39;libc.so.6&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize the pseudo-random generator with the timestamp</span>
-</span></span><span style="display:flex;"><span>libc<span style="color:#f92672">.</span>srand(c_uint(timestamp))
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>decrypted <span style="color:#f92672">=</span> bytearray()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> byte <span style="color:#f92672">in</span> bytearray(encrypted_flag):
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Generating the same &#34;random&#34; numbers as the encryptor</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Now that wouldn&#39;t make the generated numbers truly random, would it?</span>
-</span></span><span style="display:flex;"><span>    pseudo_random <span style="color:#f92672">=</span> libc<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span> <span style="color:#75715e"># &amp; 0xFF makes sure that pseudo_random is exactly 1 byte long</span>
-</span></span><span style="display:flex;"><span>    pseudo_random_2 <span style="color:#f92672">=</span> libc<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">7</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Encryptor:  *(byte *)((long)mem_ptr + i) &lt;&lt; (sbyte)pseudo_random2 | *(byte *)((long)mem_ptr + i) &gt;&gt; 8 - (sbyte)pseudo_random2;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># As you can see we invert the shifting. left to right and right to left.</span>
-</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">=</span> (byte <span style="color:#f92672">&gt;&gt;</span> pseudo_random_2) <span style="color:#f92672">|</span> (byte <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> pseudo_random_2)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># again make sure that we have exactly one byte</span>
-</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">&amp;=</span> <span style="color:#ae81ff">0xFF</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># XOR the encrypted byte with the pseudo_random again to decrypt the byte</span>
-</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">^=</span> pseudo_random
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    decrypted<span style="color:#f92672">.</span>append(tmp)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Decrypted flag: </span><span style="color:#e6db74">{</span>decrypted<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
-</span></span></code></pre></div><p><img loading="lazy" src="decrypted.png" alt="Decrypted"  />
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">CDLL</span><span class="p">,</span> <span class="n">c_uint</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need this in order to use the srand library provided by the C-Language </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and not by python since they are different and wont result in the same values used by the encryptor.</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span>  <span class="n">CDLL</span><span class="p">(</span><span class="s1">&#39;libc.so.6&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Initialize the pseudo-random generator with the timestamp</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span><span class="o">.</span><span class="n">srand</span><span class="p">(</span><span class="n">c_uint</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">decrypted</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">encrypted_flag</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Generating the same &#34;random&#34; numbers as the encryptor</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Now that wouldn&#39;t make the generated numbers truly random, would it?</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="c1"># &amp; 0xFF makes sure that pseudo_random is exactly 1 byte long</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random_2</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mi">7</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Encryptor:  *(byte *)((long)mem_ptr + i) &lt;&lt; (sbyte)pseudo_random2 | *(byte *)((long)mem_ptr + i) &gt;&gt; 8 - (sbyte)pseudo_random2;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># As you can see we invert the shifting. left to right and right to left.</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">byte</span> <span class="o">&gt;&gt;</span> <span class="n">pseudo_random_2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">byte</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">-</span> <span class="n">pseudo_random_2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># again make sure that we have exactly one byte</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># XOR the encrypted byte with the pseudo_random again to decrypt the byte</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">^=</span> <span class="n">pseudo_random</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">decrypted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Decrypted flag: </span><span class="si">{</span><span class="n">decrypted</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/posts/htb-simple-encryptor/decrypted.png"
+        alt="Decrypted"
+      />
+      
+    </figure>
 </p>
 <p>And that&rsquo;s it! We have sucessfully decrypted the flag by reverting all the steps from the encryptor. 🥳</p>
 <p>Full Code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> ctypes <span style="color:#f92672">import</span> CDLL, c_uint
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;flag.enc&#39;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f:
-</span></span><span style="display:flex;"><span>    timestamp <span style="color:#f92672">=</span> int<span style="color:#f92672">.</span>from_bytes(f<span style="color:#f92672">.</span>read(<span style="color:#ae81ff">4</span>), byteorder<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;little&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Move after timestamp</span>
-</span></span><span style="display:flex;"><span>    f<span style="color:#f92672">.</span>seek(<span style="color:#ae81ff">4</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    encrypted_flag <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Timestamp used: </span><span style="color:#e6db74">{</span>timestamp<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>datetime<span style="color:#f92672">.</span>fromtimestamp(timestamp)<span style="color:#e6db74">}</span><span style="color:#e6db74">)&#39;</span>)
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Encrypted flag (bytes): </span><span style="color:#e6db74">{</span>encrypted_flag<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>libc <span style="color:#f92672">=</span>  CDLL(<span style="color:#e6db74">&#39;libc.so.6&#39;</span>)
-</span></span><span style="display:flex;"><span>libc<span style="color:#f92672">.</span>srand(c_uint(timestamp))
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>decrypted <span style="color:#f92672">=</span> bytearray()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> byte <span style="color:#f92672">in</span> bytearray(encrypted_flag):
-</span></span><span style="display:flex;"><span>    pseudo_random <span style="color:#f92672">=</span> libc<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
-</span></span><span style="display:flex;"><span>    pseudo_random_2 <span style="color:#f92672">=</span> libc<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">7</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">=</span> ((byte <span style="color:#f92672">&gt;&gt;</span> pseudo_random_2) <span style="color:#f92672">|</span> (byte <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> pseudo_random_2)) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
-</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">^=</span> pseudo_random
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    decrypted<span style="color:#f92672">.</span>append(tmp)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Decrypted flag: </span><span style="color:#e6db74">{</span>decrypted<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">CDLL</span><span class="p">,</span> <span class="n">c_uint</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;flag.enc&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Move after timestamp</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">encrypted_flag</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Timestamp used: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Encrypted flag (bytes): </span><span class="si">{</span><span class="n">encrypted_flag</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">libc</span> <span class="o">=</span>  <span class="n">CDLL</span><span class="p">(</span><span class="s1">&#39;libc.so.6&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">libc</span><span class="o">.</span><span class="n">srand</span><span class="p">(</span><span class="n">c_uint</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">decrypted</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">encrypted_flag</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pseudo_random_2</span> <span class="o">=</span> <span class="n">libc</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&amp;</span> <span class="mi">7</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">=</span> <span class="p">((</span><span class="n">byte</span> <span class="o">&gt;&gt;</span> <span class="n">pseudo_random_2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">byte</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">-</span> <span class="n">pseudo_random_2</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmp</span> <span class="o">^=</span> <span class="n">pseudo_random</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">decrypted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Decrypted flag: </span><span class="si">{</span><span class="n">decrypted</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </span></span></code></pre></div><p>All in all I would rate this challenge with <strong>Easy</strong> instead of <strong>Very Easy</strong> since it requires some prior knowledge to bitwise operators.</p>
 <p>That&rsquo;s all for now, hopefully you&rsquo;ll join me for the next challenge soon! :)</p>
 
+          
+          
+          
+        </div>
+        
+        
 
-  </div>
+        
+        
 
-  <footer class="post-footer">
-    <ul class="post-tags">
-    </ul>
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\\htb-simple-encryptor.md"
+        var oid_likes = "likes_posts\\htb-simple-encryptor.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/the-downfall-of-eucheats/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >The Downfall Of EUCHEATS</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-08-13 19:44:43 &#43;0200 CEST">13 August 2024</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
   </footer>
 </article>
-    </main>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
     
-<footer class="footer">
-        <span>&copy; 2024 <a href="http://localhost:1313/">Logan Thompson</a></span> · 
+  
+  <div class="flex items-center justify-between">
 
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2024
+      Logan Thompson
+    </p>
+    
 
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </p>
+    
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
     })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
 
-</script>
+  </div>
 </body>
 
 </html>

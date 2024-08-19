@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Logan Thompson</title>
+    <title>Logan Thompson&#39;s Blog</title>
     <link>http://localhost:1313/</link>
-    <description>Recent content on Logan Thompson</description>
-    <generator>Hugo -- 0.127.0</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 18 Jun 2024 10:30:31 +0200</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <description>Recent content on Logan Thompson&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>me@loganthompson.de (Logan Thompson)</managingEditor>
+    <webMaster>me@loganthompson.de (Logan Thompson)</webMaster>
+    <copyright>© 2024 Logan Thompson</copyright>
+    <lastBuildDate>Tue, 13 Aug 2024 19:44:43 +0200</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Downfall Of EUCHEATS</title>
+      <link>http://localhost:1313/posts/the-downfall-of-eucheats/</link>
+      <pubDate>Tue, 13 Aug 2024 19:44:43 +0200</pubDate>
+      <author>me@loganthompson.de (Logan Thompson)</author>
+      <guid>http://localhost:1313/posts/the-downfall-of-eucheats/</guid>
+      <description>0x1 - Introduction #I like playing video games of all different categories for example racing, moba, adventure or horror just to name a few.</description>
+      
+    </item>
+    
     <item>
       <title>HackTheBox - Simple Encryptor</title>
       <link>http://localhost:1313/posts/htb-simple-encryptor/</link>
       <pubDate>Tue, 18 Jun 2024 10:30:31 +0200</pubDate>
+      <author>me@loganthompson.de (Logan Thompson)</author>
       <guid>http://localhost:1313/posts/htb-simple-encryptor/</guid>
-      <description>Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!
-0x1 - RECON Before we begin reversing the encryptor we have to see what we are dealing with.
-Identifying the file type A quick call to file reveals that the encrypt file is a 64Bit Linux executable. Now unfortunately that won&amp;rsquo;t run natively on my M3 MacBook Pro.</description>
+      <description>Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor and how to break it!</description>
+      
     </item>
-    <item>
-      <title>HackTheBox - Simple Encryptor</title>
-      <link>http://localhost:1313/posts/htb-simple-encryptor/htb-simple-encryptor/</link>
-      <pubDate>Tue, 18 Jun 2024 10:30:31 +0200</pubDate>
-      <guid>http://localhost:1313/posts/htb-simple-encryptor/htb-simple-encryptor/</guid>
-      <description>Type: Challenge Category: Reversing Difficulty: Very Easy Solves: 3655 In this post we will be looking at a very simple encryptor</description>
-    </item>
+    
   </channel>
 </rss>
